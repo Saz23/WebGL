@@ -1,1 +1,1 @@
-# WebGLとWebVRの練習
+# WebGLの練習
