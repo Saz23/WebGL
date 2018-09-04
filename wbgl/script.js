@@ -23,24 +23,43 @@ onload = function(){
     // プログラムオブジェクトの生成とリンク
     var prg = create_program(v_shader, f_shader);
 
-    // attributeLocationの取得
-    var attLocation = gl.getAttribLocation(prg, 'position');
+    // attributeLocationを配列に取得
+    var attLocation = new Array(2);
+    attLocation[0] = gl.getAttribLocation(prg, 'position');
+    attLocation[1] = gl.getAttribLocation(prg, 'color');
 
-    // attributeの要素数(この場合は xyz の3要素)
-    var attStride = 3;
+    // attributeの要素数を配列に格納
+    var attStride = new Array(2);
+    attStride[0] = 3;
+    attStride[1] = 4;
 
-    // モデル(頂点)データ
+    // 頂点の位置情報を格納する配列
     var vertex_position = [
          0.0, 1.0, 0.0,
          1.0, 0.0, 0.0,
         -1.0, 0.0, 0.0
     ];
 
-    // VBOの生成
-    var vbo = create_vbo(vertex_position);
+    // 頂点の色情報を格納する配列
+    var vertex_color = [
+         1.0, 0.0, 0.0, 1.0,
+         0.0, 1.0, 0.0, 1.0,
+         0.0, 0.0, 1.0, 1.0
+    ];
 
-    // VBOをバインド
-    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+    // VBOの生成
+    var position_vbo = create_vbo(vertex_position);
+    var color_vbo = create_vbo(vertex_color);
+
+    // VBOをバインド(位置)
+    gl.bindBuffer(gl.ARRAY_BUFFER, position_vbo);
+    gl.enableVertexAttribArray(attLocation[0]);
+    gl.vertexAttribPointer(attLocation[0], attStride[0], gl.FLOAT, false, 0, 0);
+
+    // VBOをバインド(色)
+    gl.bindBuffer(gl.ARRAY_BUFFER, color_vbo);
+    gl.enableVertexAttribArray(attLocation[1]);
+    gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
 
     // attribute属性を有効にする
     gl.enableVertexAttribArray(attLocation);
